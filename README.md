@@ -19,7 +19,35 @@ Although I couldn't get around the password prompting problem, something I could
 living hell out the of the user if they don't start the
 [SelfControl](https://github.com/SelfControlApp/selfcontrol) session.
 
+**Hammer Control** will repeatedly prompt the user to start the
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) session and it will **NOT** stop until
+the session is started or the time has passsed the scheduled blocking session.
+
+#### Cancel Proof
+
+If the user tries to cancel the start of a
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) session, **Hammer Control** will
+automatically try to start another session. It will not stop until the user starts.
+
 #### Mitigating Hiding
+
+A way that a user might get around [Cancel Proofing](#cancel-proof) is to move the password prompt
+out of the way to not obstruct any of the distractions that they may be partaking in. If the user
+doesn't submit their password for [SelfControl](https://github.com/SelfControlApp/selfcontrol)
+in _5 seconds_, **Hammer Control** will restart
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) and the prompt will move out of its
+hiding spot.
+
+**WARNING:** This also means that you only have _5 seconds_ to input your password before it gets
+erased
+
+### Time Change Resistance
+
+**Hammer Control** has it's own internal clock and it periodically verifies the time with an online
+source. The user cannot bypass the schedule if they change the local time. When
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) starts however, the user can still
+bypass it with a time skip. When they change the time back the time, **Hammer Control** will
+automatically start another blocking session.
 
 ## Installation
 
