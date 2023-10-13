@@ -3,6 +3,9 @@
 A script that uses [hammerspoon](https://github.com/Hammerspoon/hammerspoon) to create schedules
 for [SelfControl](https://github.com/SelfControlApp/selfcontrol).
 
+**WARNING:** I've built this script to my preferences so there may be a lot of bugs that haven't
+been caught. Submit an issue or pull request if you do find one though.
+
 ## Features
 
 ### Annoyance
