@@ -1,0 +1,26 @@
+{
+  "sunday": [],
+  "monday": [
+    {
+      "start": "23:00",
+      "end": "23:20",
+      "blocklist": "~/Desktop/distractions.selfcontrol"
+    }
+  ],
+  "tuesday": [],
+  "wednesday": [],
+  "thursday": [
+    {
+      "start": "03:00",
+      "end": "04:20",
+      "blocklist": "~/.hammerspoon/hammer-control/social-media.selfcontrol"
+    },
+    {
+      "start": "23:00",
+      "end": "23:20",
+      "blocklist": "~/.hammerspoon/hammer-control/blacklist.selfcontrol"
+    }
+  ],
+  "friday": [],
+  "saturday": []
+}
