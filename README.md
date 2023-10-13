@@ -49,7 +49,7 @@ erased
 **Hammer Control** has it's own internal clock and it periodically verifies the time with an online
 source. The user cannot bypass the schedule if they change the local time. When
 [SelfControl](https://github.com/SelfControlApp/selfcontrol) starts however, the user can still
-bypass it with a time skip. When they change the time back the time, **Hammer Control** will
+bypass it with a time skip. When they change the time back, **Hammer Control** will
 automatically start another blocking session.
 
 ## Installation
