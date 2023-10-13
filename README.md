@@ -67,3 +67,55 @@ automatically start another blocking session.
    - or manually add `require("hammer-control")` to your `init.lua` file
 
 ## Usage
+
+### Blocklist
+
+**Hammer Control** uses blacklists saved from
+[SelfControl](https://github.com/SelfControlApp/selfcontrol). You can save a blacklist
+(a `.selfcontrol` file) by pressing `⌘ + s` while
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) is open. Make sure to remember the
+full path to the file starting from your home (`~`) directory, because you will need it to
+create a schedule.
+
+### schedule.json
+
+To create a schedule, create a `schedule.json` file in the `~/.hammerspoon/hammer-control`
+directory. If you want to use the `example-schedule.json` as a reference, you copy it over with
+`cp ~/.hammerspoon/hammer-control/example-schedule.json ~/.hammerspoon/hammer-control/schedule.json`
+or copy and paste this into your `schedule.json` file:
+
+```json
+{
+  "sunday": [],
+  "monday": [
+    {
+      "start": "23:00",
+      "end": "23:20",
+      "blocklist": "~/Desktop/distractions.selfcontrol"
+    }
+  ],
+  "tuesday": [],
+  "wednesday": [],
+  "thursday": [
+    {
+      "start": "03:00",
+      "end": "04:20",
+      "blocklist": "~/.hammerspoon/hammer-control/social-media.selfcontrol"
+    },
+    {
+      "start": "23:00",
+      "end": "23:20",
+      "blocklist": "~/.hammerspoon/hammer-control/blacklist.selfcontrol"
+    }
+  ],
+  "friday": [],
+  "saturday": []
+}
+```
+
+The `json` file must contain all of the days of the week in lower case and have their values as
+list of objects. Each object has a `start`, `end`, and `blocklist` property. `start` and `end` are
+times in **24 hour format** indicating when the scheduled blocking session starts and ends on that
+specific day. `blocklist` is the file that [SelfControl](https://github.com/SelfControlApp/selfcontrol)
+uses as the blacklist. _Ideally_, the path to the `.selfcontrol` file is absolute, referencing its
+location from the home (`~`) directory.
