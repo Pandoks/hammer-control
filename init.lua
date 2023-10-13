@@ -1,4 +1,4 @@
-local schedule = hs.json.read("./selfcontrol/schedule.json")
+local schedule = hs.json.read("./hammer-control/schedule.json")
 local days = { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" }
 
 -- initiate time
