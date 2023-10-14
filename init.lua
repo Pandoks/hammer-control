@@ -159,5 +159,6 @@ local function selfControl()
   startSelfControl()
 end
 
+selfControl()
 local selfcontrol_timer = hs.timer.new(60, selfControl)
 selfcontrol_timer:start()
