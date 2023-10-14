@@ -17,6 +17,10 @@ will barely notice it. There will be a quick popup indicating that
 [SelfControl](https://github.com/SelfControlApp/selfcontrol) started, but it fades away by itself
 quickly.
 
+<p align="center">
+  <img src="https://github.com/Pandoks/hammer-control/assets/35944715/b5b16578-2a1f-4f89-9d5f-72c08b385745" width=70% height=70%>
+</p>
+
 ### Time Change Resistance
 
 **Hammer Control** has it's own internal clock and it periodically verifies the time with an online
