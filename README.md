@@ -61,7 +61,7 @@ automatically start another blocking session.
 1. Add `require("hammer-control")` to your `init.lua` file
 
    ```sh
-   sed -i '1s/^/require("hammer-control")\n/' ~/.hammerspoon/init.lua
+   echo 'require("hammer-control")' | cat - ~/.hammerspoon/init.lua > temp && mv temp ~/.hammerspoon/init.lua
    ```
 
 1. Add your password to _Apple Keychain_
