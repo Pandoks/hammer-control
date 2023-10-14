@@ -8,41 +8,14 @@ been caught. Submit an issue or pull request if you do find one though.
 
 ## Features
 
-### Annoyance
+### Auto-Fill Password
 
-Since `v4` of [SelfControl](https://github.com/SelfControlApp/selfcontrol) couldn't get around
-prompting the user for the admin password to start the program, it made auto-scheduling scripts
-like [auto-selfcontrol](https://github.com/andreasgrill/auto-selfcontrol) not as effective since
-the user would have to consciously start the session. Someone could easily just click cancel and
-[SelfControl](https://github.com/SelfControlApp/selfcontrol) would be useless. It was much better
-when you could forget about it, so when you got distracted, you wouldn't have the chance to fight
-back.
-
-Although I couldn't get around the password prompting problem, something I could do is annoy the
-living hell out the of the user if they don't start the
-[SelfControl](https://github.com/SelfControlApp/selfcontrol) session.
-
-**Hammer Control** will repeatedly prompt the user to start the
-[SelfControl](https://github.com/SelfControlApp/selfcontrol) session and it will **NOT** stop until
-the session is started or the time has passsed the scheduled blocking session.
-
-#### Cancel Proof
-
-If the user tries to cancel the start of a
-[SelfControl](https://github.com/SelfControlApp/selfcontrol) session, **Hammer Control** will
-automatically try to start another session. It will not stop until the user starts.
-
-#### Mitigating Hiding
-
-A way that a user might get around [Cancel Proofing](#cancel-proof) is to move the password prompt
-out of the way to not obstruct any of the distractions that they may be partaking in. If the user
-doesn't submit their password for [SelfControl](https://github.com/SelfControlApp/selfcontrol)
-in _5 seconds_, **Hammer Control** will restart
-[SelfControl](https://github.com/SelfControlApp/selfcontrol) and the prompt will move out of its
-hiding spot.
-
-**WARNING:** This also means that you only have _5 seconds_ to input your password before it gets
-erased
+**Hammer Control** uses your password stored in _Apple Keychain_ to automatically fill out
+[SelfControl's](https://github.com/SelfControlApp/selfcontrol) prompt to install a helper. Usually
+you would need to do this manually, but **Hammer Control** will do it for you so quickly that you
+will barely notice it. There will be a quick popup indicating that
+[SelfControl](https://github.com/SelfControlApp/selfcontrol) started, but it fades away by itself
+quickly.
 
 ### Time Change Resistance
 
@@ -63,11 +36,35 @@ automatically start another blocking session.
 
 ### Setup
 
-1. `mkdir ~/.hammerspoon` if it doesn't exist.
-1. `git clone https://github.com/Pandoks/hammer-control.git ~/.hammerspoon/hammer-control`
-1. `touch ~/.hammerspoon/init.lua` if it doesn't exist.
-1. `sed -i '1s/^/require("hammer-control")\n/' ~/.hammerspoon/init.lua`
-   - or manually add `require("hammer-control")` to your `init.lua` file
+1. Make [hammerspoon](https://github.com/Hammerspoon/hammerspoon) directory
+
+   ```sh
+   mkdir ~/.hammerspoon
+   ```
+
+1. Clone directory to [hammerspoon](https://github.com/Hammerspoon/hammerspoon directory
+
+   ```sh
+   git clone https://github.com/Pandoks/hammer-control.git ~/.hammerspoon/hammer-control
+   ```
+
+1. Create `init.lua` for [hammerspoon](https://github.com/Hammerspoon/hammerspoon)
+
+   ```sh
+   touch ~/.hammerspoon/init.lua
+   ```
+
+1. Add `require("hammer-control")` to your `init.lua` file
+
+   ```sh
+   sed -i '1s/^/require("hammer-control")\n/' ~/.hammerspoon/init.lua
+   ```
+
+1. Add your password to _Apple Keychain_
+
+   ```sh
+   security add-generic-password -a $(whoami) -s hammer-control -w
+   ```
 
 ## Usage
 
@@ -83,7 +80,7 @@ create a schedule.
 ### schedule.json
 
 To create a schedule, create a `schedule.json` file in the `~/.hammerspoon/hammer-control`
-directory. If you want to use the `example-schedule.json` as a reference, you copy it over with
+directory. If you want to use the `example-schedule.json` as a reference, you can copy it over with
 `cp ~/.hammerspoon/hammer-control/example-schedule.json ~/.hammerspoon/hammer-control/schedule.json`
 or copy and paste this into your `schedule.json` file:
 
