@@ -38,7 +38,17 @@ automatically start another blocking session.
 - SelfControl
   - `brew install selfcontrol`
 
-### Setup
+### Installer
+
+Use the installer to setup **Hammer Control**:
+
+```sh
+git clone https://github.com/Pandoks/hammer-control.git
+cd hammer-control
+./install
+```
+
+### Manual Installation
 
 1. Make [hammerspoon](https://github.com/Hammerspoon/hammerspoon) directory
 
