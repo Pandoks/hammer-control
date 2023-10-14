@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ ! -d ~/.hammerspoon ]; then
+	mkdir ~/.hammerspoon
+fi
+
+git clone https://github.com/Pandoks/hammer-control.git ~/.hammerspoon/hammer-control
+
+if [ ! -f ~/.hammerspoon/init.lua ]; then
+	touch ~/.hammerspoon/init.lua
+fi
+
+if ! grep -q 'require("hammer-control")' ~/.hammerspoon/init.lua && ! grep -q "require('hammer-control')" ~/.hammerspoon/init.lua; then
+	echo 'require("hammer-control")' | cat - ~/.hammerspoon/init.lua >temp && mv temp ~/.hammerspoon/init.lua
+fi
+
+if ! security find-generic-password -a $(whoami) -s hammer-control -w >/dev/null 2>&1; then
+	security add-generic-password -a $(whoami) -s hammer-control -w
+fi
+
+echo "Installation complete!"
