@@ -133,3 +133,5 @@ times in **24 hour format** indicating when the scheduled blocking session start
 specific day. `blocklist` is the file that [SelfControl](https://github.com/SelfControlApp/selfcontrol)
 uses as the blacklist. _Ideally_, the path to the `.selfcontrol` file is absolute, referencing its
 location from the home (`~`) directory.
+
+**NOTE:** The hour needs to be 2 digits. `2:00` won't work. `02:00` will work.
