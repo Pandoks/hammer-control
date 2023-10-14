@@ -46,7 +46,7 @@ automatically start another blocking session.
    mkdir ~/.hammerspoon
    ```
 
-1. Clone directory to [hammerspoon](https://github.com/Hammerspoon/hammerspoon directory
+1. Clone directory to [hammerspoon](https://github.com/Hammerspoon/hammerspoon) directory
 
    ```sh
    git clone https://github.com/Pandoks/hammer-control.git ~/.hammerspoon/hammer-control
