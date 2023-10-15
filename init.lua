@@ -56,6 +56,9 @@ sleep_watcher:start()
 
 local function convertToMinute(time_string)
   local hour, minute = string.match(time_string, "(%d%d):(%d%d)")
+  if not hour or not minute then
+    error("Time format is incorrect. Needs two digits for both hour and minute: 01:00 not 1:00")
+  end
   return tonumber(hour) * 60 + tonumber(minute)
 end
 
