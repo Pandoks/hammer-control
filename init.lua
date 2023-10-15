@@ -130,7 +130,7 @@ local function selfControl()
     elseif string.match(std_error, "Blocklist is empty, or block does not end in the future") then
       local block_file_attributes = hs.fs.attributes(block_file)
       if not (block_file_attributes and block_file_attributes["mode"] == "file") then
-        error("Blocklist file " .. block_file .. "does not exist or has an error")
+        error("Blocklist file " .. block_file .. " does not exist or has an error")
       else
         error("End date ends in the past")
       end
