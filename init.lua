@@ -114,12 +114,13 @@ local function selfControl()
   local end_time = os.date("!%Y-%m-%dT%H:%M:%SZ", os.time(os.date("*t")) + block_time * 60)
 
   local selfcontrol_command = "/Applications/SelfControl.app/Contents/MacOS/selfcontrol-cli"
+  local block_file = hs.fs.pathToAbsolute(block["blocklist"])
   local selfcontrol_arguments = {
     "start",
     "--enddate",
     end_time,
     "--blocklist",
-    hs.fs.pathToAbsolute(block["blocklist"]),
+    block_file,
   }
 
   local startSelfControl
@@ -127,11 +128,16 @@ local function selfControl()
     if exit_code == 0 then
       print("SelfControl started")
     elseif string.match(std_error, "Blocklist is empty, or block does not end in the future") then
-      print("SelfControl does not end in the future")
+      local block_file_attributes = hs.fs.attributes(block_file)
+      if not (block_file_attributes and block_file_attributes["mode"] == "file") then
+        error("Blocklist file " .. block_file .. "does not exist or has an error")
+      else
+        error("End date ends in the past")
+      end
     elseif string.match(std_error, "Block is already running") then
-      print("SelfControl is already running")
+      error("SelfControl is already running")
     elseif string.match(std_error, "Authorization cancelled") then
-      print("User tried to cancel")
+      print("User tried to cancel. Restarting...")
       startSelfControl()
     end
   end
@@ -140,7 +146,7 @@ local function selfControl()
     local selfcontrol_task =
       hs.task.new(selfcontrol_command, selfcontrol_callback, selfcontrol_arguments)
     if not selfcontrol_task:start() then
-      print("Couldn't start SelfControl task")
+      error("Couldn't start SelfControl task")
       return
     end
 
