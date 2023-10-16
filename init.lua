@@ -2,7 +2,8 @@ local schedule = hs.json.read("./hammer-control/schedule.json")
 local days = { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" }
 
 -- initiate time
-local DAY, TIME
+DAY = nil
+TIME = nil
 local function getTime()
   local url = "http://worldtimeapi.org/api/ip"
   local status, body = hs.http.get(url)
@@ -45,14 +46,6 @@ local function incrementTime()
     TIME = string.format("%02d:%02d", hour, minute)
   end
 end
-
--- initiate system sleep tracker
-local sleep_watcher = hs.caffeinate.watcher.new(function(event_type)
-  if event_type == hs.caffeinate.watcher.systemDidWake then
-    getTime() -- reset time after wake
-  end
-end)
-sleep_watcher:start()
 
 local function convertToMinute(time_string)
   local hour, minute = string.match(time_string, "(%d%d):(%d%d)")
@@ -153,7 +146,9 @@ local function selfControl()
     local prompt_timer
     prompt_timer = hs.timer.doEvery(0.1, function()
       local security_prompt = hs.application.get("SecurityAgent")
+      print(hs.inspect(security_prompt)) -- remove
       if security_prompt then
+        print("stroke") --remove
         local password =
           hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
         security_prompt:activate(true)
@@ -163,10 +158,24 @@ local function selfControl()
         prompt_timer:stop()
         return
       end
+      print("after") --remove
     end)
   end
+  print("Starting Self Control application") -- remove
   startSelfControl()
 end
+
+-- initiate system sleep tracker
+local sleep_watcher = hs.caffeinate.watcher.new(function(event_type)
+  if event_type == hs.caffeinate.watcher.systemDidWake then
+    print("resetting time")
+    getTime() -- reset time after wake
+    print("time resetted")
+    print("running selfcontrol")
+    selfControl()
+  end
+end)
+sleep_watcher:start()
 
 selfControl()
 local selfcontrol_timer = hs.timer.new(60, selfControl)
