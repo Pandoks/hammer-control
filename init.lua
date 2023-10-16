@@ -83,6 +83,12 @@ local function selfControl()
     return
   end
 
+  if not schedule then
+    error(
+      "No schedule file found. Schedule should be in ~/.hammerspoon/hammer-control/schedule.json"
+    )
+    return
+  end
   local block
   for _, timeblock in pairs(schedule[DAY]) do
     local start_time = timeblock["start"]
