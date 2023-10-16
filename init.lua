@@ -75,6 +75,7 @@ local function compareTime(time1, time2)
 end
 
 local function selfControl()
+  print("selfControl") --remove
   incrementTime()
   local output =
     hs.execute("/Applications/SelfControl.app/Contents/MacOS/selfcontrol-cli is-running 2>&1")
@@ -167,14 +168,26 @@ local function selfControl()
   startSelfControl()
 end
 
--- initiate system sleep tracker
-SLEEP_WATCHER = hs.caffeinate.watcher.new(function(event_type)
+-- system event tracker
+SYSTEM_WATCHER = hs.caffeinate.watcher.new(function(event_type)
   if event_type == hs.caffeinate.watcher.systemDidWake then
+    print("waking") -- remove
     getTime() -- reset time after wake
-    selfControl()
+  end
+
+  if event_type == hs.caffeinate.watcher.screensDidUnlock then
+    print("unlocking") --remove
+    print(selfControl) --remove
+    selfControl() -- run Self Control after unlock
+    SELFCONTROL_TIMER:start()
+  end
+
+  if event_type == hs.caffeinate.watcher.screensDidLock then
+    print("locking") --remove
+    SELFCONTROL_TIMER:stop() -- stop Self Control running on login screen
   end
 end)
-SLEEP_WATCHER:start()
+SYSTEM_WATCHER:start()
 
 selfControl()
 SELFCONTROL_TIMER = hs.timer.new(60, selfControl)
