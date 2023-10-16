@@ -2,8 +2,8 @@ local schedule = hs.json.read("./hammer-control/schedule.json")
 local days = { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" }
 
 -- initiate time
-DAY = nil
-TIME = nil
+DAY = ""
+TIME = ""
 local function getTime()
   local url = "http://worldtimeapi.org/api/ip"
   local status, body = hs.http.get(url)
