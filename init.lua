@@ -1,3 +1,4 @@
+hs.application.enableSpotlightForNameSearches(true)
 local schedule = hs.json.read("./hammer-control/schedule.json")
 local days = { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" }
 
@@ -156,6 +157,7 @@ local function selfControl()
         hs.eventtap.keyStroke({}, "return")
         hs.alert.show("SelfControl started")
         prompt_timer:stop()
+        print("timer stopped") --remove
         return
       end
       print("after") --remove
@@ -168,10 +170,7 @@ end
 -- initiate system sleep tracker
 local sleep_watcher = hs.caffeinate.watcher.new(function(event_type)
   if event_type == hs.caffeinate.watcher.systemDidWake then
-    print("resetting time")
     getTime() -- reset time after wake
-    print("time resetted")
-    print("running selfcontrol")
     selfControl()
   end
 end)
