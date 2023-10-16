@@ -168,14 +168,14 @@ local function selfControl()
 end
 
 -- initiate system sleep tracker
-local sleep_watcher = hs.caffeinate.watcher.new(function(event_type)
+SLEEP_WATCHER = hs.caffeinate.watcher.new(function(event_type)
   if event_type == hs.caffeinate.watcher.systemDidWake then
     getTime() -- reset time after wake
     selfControl()
   end
 end)
-sleep_watcher:start()
+SLEEP_WATCHER:start()
 
 selfControl()
-local selfcontrol_timer = hs.timer.new(60, selfControl)
-selfcontrol_timer:start()
+SELFCONTROL_TIMER = hs.timer.new(60, selfControl)
+SELFCONTROL_TIMER:start()
