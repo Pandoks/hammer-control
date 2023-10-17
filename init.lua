@@ -18,6 +18,6 @@ SYSTEM_WATCHER = hs.caffeinate.watcher.new(function(event_type)
 end)
 SYSTEM_WATCHER:start()
 
--- selfcontrol.start()
+selfcontrol.start()
 SELFCONTROL_TIMER = hs.timer.new(60, selfcontrol.run)
 SELFCONTROL_TIMER:start()
