@@ -4,14 +4,14 @@ local time = require("hammer-control/time")
 
 -- system event tracker
 SYSTEM_WATCHER = hs.caffeinate.watcher.new(function(event_type)
-  -- if event_type == hs.caffeinate.watcher.systemDidWake then
-  --   print("waking") -- remove
-  -- end
+  if event_type == hs.caffeinate.watcher.systemDidWake then
+    print("waking") -- remove
+  end
 
   if event_type == hs.caffeinate.watcher.screensDidUnlock then
     print("unlocking") --remove
     time.getTime() -- reset time after wake
-    selfcontrol.run() -- run Self Control after unlock
+    selfcontrol.start() -- run Self Control after unlock
     SELFCONTROL_TIMER:start()
   end
 

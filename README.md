@@ -80,6 +80,14 @@ cd hammer-control
    security add-generic-password -a $(whoami) -s hammer-control -w
    ```
 
+### Updates
+
+To update, you can just `git pull` inside of `~/.hammerspoon/hammer-control` directory.
+
+```sh
+git pull
+```
+
 ## Usage
 
 ### Blocklist
