@@ -19,35 +19,29 @@ local function insertPassword()
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
 
       security_prompt:activate(true)
-      hs.timer.waitUntil(function()
-        local front_app = hs.application.frontmostApplication()
+      local front_app = hs.application.frontmostApplication()
+      while not (front_app and front_app:name() == "SecurityAgent") do
+        security_prompt:activate(true)
+        front_app = hs.application.frontmostApplication()
+      end
+      hs.eventtap.keyStrokes(password)
+      hs.eventtap.keyStroke({}, "return")
 
-        local focused = front_app and front_app:name() == "SecurityAgent"
-        if not focused then
-          security_prompt:activate(true)
-        end
-
-        return focused
-      end, function(timer)
-        timer:stop()
-
-        hs.eventtap.keyStrokes(password)
-        hs.eventtap.keyStroke({}, "return")
-        hs.alert.show("SelfControl started")
-
+      if isSelfControlRunning() then
         prompt_timer:stop()
-      end, 0.05)
-
-      return
+        return
+      end
     end
     print("after") --remove
   end)
   prompt_timer:start()
 end
 
-local function selfControlCallback(exit_code, _, std_error)
+local function selfControlCallback(exit_code, std_output, std_error)
+  print(std_output)
   if exit_code == 0 then
     print("SelfControl started")
+    hs.alert.show("SelfControl started")
   elseif string.match(std_error, "Blocklist is empty, or block does not end in the future") then
     local block_file_attributes = hs.fs.attributes(BLOCK_FILE)
     if not (block_file_attributes and block_file_attributes["mode"] == "file") then
