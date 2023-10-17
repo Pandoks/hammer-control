@@ -13,18 +13,31 @@ local function insertPassword()
   local prompt_timer
   prompt_timer = hs.timer.new(0.1, function()
     local security_prompt = hs.application.get("SecurityAgent")
-    print("security prompt:") --remove
-    print(hs.inspect(security_prompt)) -- remove
     if security_prompt then
-      print("stroke") --remove
+      print("inserting") --remove
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
+
       security_prompt:activate(true)
-      hs.eventtap.keyStrokes(password)
-      hs.eventtap.keyStroke({}, "return")
-      hs.alert.show("SelfControl started")
-      prompt_timer:stop()
-      print("timer stopped") --remove
+      hs.timer.waitUntil(function()
+        local front_app = hs.application.frontmostApplication()
+
+        local focused = front_app and front_app:name() == "SecurityAgent"
+        if not focused then
+          security_prompt:activate(true)
+        end
+
+        return focused
+      end, function(timer)
+        timer:stop()
+
+        hs.eventtap.keyStrokes(password)
+        hs.eventtap.keyStroke({}, "return")
+        hs.alert.show("SelfControl started")
+
+        prompt_timer:stop()
+      end, 0.05)
+
       return
     end
     print("after") --remove
@@ -54,7 +67,6 @@ end
 
 function M.start()
   if isSelfControlRunning() then
-    print("already running") -- remove
     return
   end
 
@@ -78,10 +90,8 @@ function M.start()
     hs.fs.pathToAbsolute(BLOCK_FILE),
   }
 
-  print("starting task")
   local selfcontrol_task =
     hs.task.new(selfcontrol_command, selfControlCallback, selfcontrol_arguments)
-  print("running task")
   if not selfcontrol_task:start() then
     error("Couldn't start SelfControl task")
     return
@@ -91,7 +101,6 @@ function M.start()
 end
 
 function M.run()
-  print("selfControl") --remove
   time.incrementTime()
   M.start()
 end
