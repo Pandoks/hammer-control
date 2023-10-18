@@ -88,6 +88,8 @@ To update, you can just `git pull` inside of `~/.hammerspoon/hammer-control` dir
 git pull
 ```
 
+Remember to reload [hammerspoon](https://github.com/Hammerspoon/hammerspoon) config after pulling.
+
 ## Usage
 
 ### Blocklist
@@ -143,3 +145,7 @@ uses as the blacklist. _Ideally_, the path to the `.selfcontrol` file is absolut
 location from the home (`~`) directory.
 
 **NOTE:** The hour needs to be 2 digits. `2:00` won't work. `02:00` will work.
+
+## Troubleshooting
+
+- Restarting your system may help

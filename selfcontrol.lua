@@ -41,7 +41,7 @@ local function selfControlCallback(exit_code, std_output, std_error)
   print(std_output)
   if exit_code == 0 then
     print("SelfControl started")
-    hs.alert.show("SelfControl started")
+    hs.alert.show("SelfControl started", 2)
   elseif string.match(std_error, "Blocklist is empty, or block does not end in the future") then
     local block_file_attributes = hs.fs.attributes(BLOCK_FILE)
     if not (block_file_attributes and block_file_attributes["mode"] == "file") then
