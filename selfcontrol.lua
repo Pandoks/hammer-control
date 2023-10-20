@@ -14,7 +14,6 @@ local function insertPassword()
   prompt_timer = hs.timer.new(0.1, function()
     local security_prompt = hs.application.get("SecurityAgent")
     if security_prompt then
-      print("inserting") --remove
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
 
@@ -32,13 +31,11 @@ local function insertPassword()
         return
       end
     end
-    print("after") --remove
   end)
   prompt_timer:start()
 end
 
-local function selfControlCallback(exit_code, std_output, std_error)
-  print(std_output)
+local function selfControlCallback(exit_code, _, std_error)
   if exit_code == 0 then
     print("SelfControl started")
     hs.alert.show("SelfControl started", 2)

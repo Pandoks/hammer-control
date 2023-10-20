@@ -85,7 +85,6 @@ function M.getSchedule()
   for _, timeblock in pairs(SCHEDULE[M.DAY]) do
     local start_time = timeblock["start"]
     local end_time = timeblock["end"]
-    print(M.TIME)
 
     if compareTime(M.TIME, end_time) >= 0 then
       goto continue
@@ -98,13 +97,11 @@ function M.getSchedule()
     ::continue::
   end
   if block == nil then
-    print("block") --remove
     return
   end
 
   local block_time = convertToMinute(block["end"]) - convertToMinute(M.TIME)
   if block_time < 0 then
-    print("time < 0") --remove
     return
   end
   local end_time = os.date("!%Y-%m-%dT%H:%M:%SZ", os.time(os.date("*t")) + block_time * 60)
