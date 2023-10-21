@@ -9,7 +9,7 @@ local function isSelfControlRunning()
   return string.match(output, "YES")
 end
 
-local function insertPassword()
+local function insertPassword(current_app)
   local prompt_timer
   prompt_timer = hs.timer.new(0.1, function()
     local security_prompt = hs.application.get("SecurityAgent")
@@ -17,13 +17,13 @@ local function insertPassword()
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
 
-      security_prompt:activate(true)
+      current_app:activate(true)
       local front_app = hs.application.frontmostApplication()
       while not (front_app and front_app:name() == "SecurityAgent") do
-        security_prompt:activate(true)
+        current_app:activate(true)
         front_app = hs.application.frontmostApplication()
       end
-      hs.eventtap.keyStrokes(password)
+      hs.eventtap.keyStrokes(password, security_prompt)
       local press_ok = [[
         tell application "System Events"
           click button "Install Helper" of window 1 of application process "SecurityAgent"
@@ -91,12 +91,13 @@ function M.start()
 
   local selfcontrol_task =
     hs.task.new(selfcontrol_command, selfControlCallback, selfcontrol_arguments)
+  local current_app = hs.application.frontmostApplication()
   if not selfcontrol_task:start() then
     error("Couldn't start SelfControl task")
     return
   end
 
-  insertPassword()
+  insertPassword(current_app)
 end
 
 function M.run()
