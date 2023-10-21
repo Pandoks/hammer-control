@@ -24,7 +24,15 @@ local function insertPassword()
         front_app = hs.application.frontmostApplication()
       end
       hs.eventtap.keyStrokes(password)
-      hs.eventtap.keyStroke({}, "return")
+      local press_ok = [[
+        tell application "System Events"
+          click button "Install Helper" of window 1 of application process "SecurityAgent"
+        end tell
+      ]]
+      local success, result, _ = hs.osascript.applescript(press_ok)
+      if not success then
+        error("Error executing AppleScript: " .. hs.inspect(result))
+      end
 
       if isSelfControlRunning() then
         prompt_timer:stop()
