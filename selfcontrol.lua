@@ -9,7 +9,7 @@ local function isSelfControlRunning()
   return string.match(output, "YES")
 end
 
-local function insertPassword(current_app)
+local function insertPassword()
   local prompt_timer
   prompt_timer = hs.timer.new(0.1, function()
     local security_prompt = hs.application.get("SecurityAgent")
@@ -17,22 +17,13 @@ local function insertPassword(current_app)
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
 
-      current_app:activate(true)
-      local front_app = hs.application.frontmostApplication()
-      while not (front_app and front_app:name() == "SecurityAgent") do
-        current_app:activate(true)
-        front_app = hs.application.frontmostApplication()
-      end
       hs.eventtap.keyStrokes(password, security_prompt)
       local press_ok = [[
         tell application "System Events"
           click button "Install Helper" of window 1 of application process "SecurityAgent"
         end tell
       ]]
-      local success, result, _ = hs.osascript.applescript(press_ok)
-      if not success then
-        error("Error executing AppleScript: " .. hs.inspect(result))
-      end
+      hs.osascript.applescript(press_ok)
 
       if isSelfControlRunning() then
         prompt_timer:stop()
@@ -41,6 +32,21 @@ local function insertPassword(current_app)
     end
   end)
   prompt_timer:start()
+end
+
+local function sendToBackCallback(app_name, event_type, app_object)
+  if
+    app_name == "SecurityAgent"
+    and (
+      event_type == hs.application.watcher.launched
+      or event_type == hs.application.watcher.activated
+    )
+  then
+    local window = app_object:mainWindow()
+    if window then
+      window:sendToBack()
+    end
+  end
 end
 
 local function selfControlCallback(exit_code, _, std_error)
@@ -89,15 +95,18 @@ function M.start()
     hs.fs.pathToAbsolute(BLOCK_FILE),
   }
 
+  local send_to_back_watcher = hs.application.watcher.new(sendToBackCallback)
+  send_to_back_watcher:start()
+
   local selfcontrol_task =
     hs.task.new(selfcontrol_command, selfControlCallback, selfcontrol_arguments)
-  local current_app = hs.application.frontmostApplication()
   if not selfcontrol_task:start() then
     error("Couldn't start SelfControl task")
     return
   end
 
-  insertPassword(current_app)
+  insertPassword()
+  send_to_back_watcher:stop()
 end
 
 function M.run()
