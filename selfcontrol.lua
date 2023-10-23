@@ -10,13 +10,11 @@ local function isSelfControlRunning()
 end
 
 local function insertPassword()
-  local prompt_timer
-  prompt_timer = hs.timer.new(0.1, function()
+  hs.timer.doUntil(isSelfControlRunning, function()
     local security_prompt = hs.application.get("SecurityAgent")
     if security_prompt then
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
-
       hs.eventtap.keyStrokes(password, security_prompt)
       local press_ok = [[
         tell application "System Events"
@@ -24,14 +22,8 @@ local function insertPassword()
         end tell
       ]]
       hs.osascript.applescript(press_ok)
-
-      if isSelfControlRunning() then
-        prompt_timer:stop()
-        return
-      end
     end
-  end)
-  prompt_timer:start()
+  end, 0.1)
 end
 
 local function sendToBackCallback(app_name, event_type, app_object)
