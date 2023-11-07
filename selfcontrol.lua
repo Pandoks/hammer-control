@@ -11,11 +11,12 @@ end
 
 local function insertPassword()
   hs.timer.doUntil(isSelfControlRunning, function()
-    local security_prompt = hs.application.get("SecurityAgent")
+    local security_prompt = hs.application.get("com.apple.SecurityAgent")
     if security_prompt then
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
       hs.eventtap.keyStrokes(password, security_prompt)
+
       local press_ok = [[
         tell application "System Events"
           click button "Install Helper" of window 1 of application process "SecurityAgent"
@@ -23,22 +24,7 @@ local function insertPassword()
       ]]
       hs.osascript.applescript(press_ok)
     end
-  end, 0.1)
-end
-
-local function sendToBackCallback(app_name, event_type, app_object)
-  if
-    app_name == "SecurityAgent"
-    and (
-      event_type == hs.application.watcher.launched
-      or event_type == hs.application.watcher.activated
-    )
-  then
-    local window = app_object:mainWindow()
-    if window then
-      window:sendToBack()
-    end
-  end
+  end)
 end
 
 local function selfControlCallback(exit_code, _, std_error)
@@ -87,9 +73,6 @@ function M.start()
     hs.fs.pathToAbsolute(BLOCK_FILE),
   }
 
-  local send_to_back_watcher = hs.application.watcher.new(sendToBackCallback)
-  send_to_back_watcher:start()
-
   local selfcontrol_task =
     hs.task.new(selfcontrol_command, selfControlCallback, selfcontrol_arguments)
   if not selfcontrol_task:start() then
@@ -98,7 +81,6 @@ function M.start()
   end
 
   insertPassword()
-  send_to_back_watcher:stop()
 end
 
 function M.run()
