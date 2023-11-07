@@ -24,7 +24,7 @@ local function insertPassword()
       ]]
       hs.osascript.applescript(press_ok)
     end
-  end)
+  end, 0.3)
 end
 
 local function selfControlCallback(exit_code, _, std_error)
