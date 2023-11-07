@@ -10,29 +10,21 @@ local function isSelfControlRunning()
 end
 
 local function insertPassword()
-  local prompt_timer
-  prompt_timer = hs.timer.new(0.1, function()
-    local security_prompt = hs.application.get("SecurityAgent")
+  hs.timer.doUntil(isSelfControlRunning, function()
+    local security_prompt = hs.application.get("com.apple.SecurityAgent")
     if security_prompt then
       local password =
         hs.execute("security find-generic-password -a $(whoami) -s hammer-control -w")
+      hs.eventtap.keyStrokes(password, security_prompt)
 
-      security_prompt:activate(true)
-      local front_app = hs.application.frontmostApplication()
-      while not (front_app and front_app:name() == "SecurityAgent") do
-        security_prompt:activate(true)
-        front_app = hs.application.frontmostApplication()
-      end
-      hs.eventtap.keyStrokes(password)
-      hs.eventtap.keyStroke({}, "return")
-
-      if isSelfControlRunning() then
-        prompt_timer:stop()
-        return
-      end
+      local press_ok = [[
+        tell application "System Events"
+          click button "Install Helper" of window 1 of application process "SecurityAgent"
+        end tell
+      ]]
+      hs.osascript.applescript(press_ok)
     end
-  end)
-  prompt_timer:start()
+  end, 0.3)
 end
 
 local function selfControlCallback(exit_code, _, std_error)
