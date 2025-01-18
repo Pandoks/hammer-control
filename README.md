@@ -1,7 +1,9 @@
 # 🔨 Hammer Control
 
-**NOTICE**: I am currently working on a standalone version of this project so that it doesn't need
-to rely on SelfControl. Check it out [here](https://github.com/Pandoks/whisper).
+> [!IMPORTANT]
+>
+> With the release of [Raycast Focus](https://www.raycast.com/core-features/focus), I have stopped
+> development of `Hammer Control` because I have stopped using [SelfControl](https://github.com/SelfControlApp/selfcontrol).
 
 A script that uses [hammerspoon](https://github.com/Hammerspoon/hammerspoon) to create schedules
 for [SelfControl](https://github.com/SelfControlApp/selfcontrol).
